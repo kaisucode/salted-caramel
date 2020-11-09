@@ -32,14 +32,13 @@ export default function TabOneScreen() {
 	const [orderedTaskNames, setOrderedTaskNames] = useState(["task1", "task2"]);
 
 	const addReminder = (name, contents) => {
-		var newReminders = allReminders;
+		const newReminders = allReminders;
 		newReminders[name] = contents;
 		setAllReminders(newReminders);
 
-		var newTaskNames = orderedTaskNames;
+		const newTaskNames = [...orderedTaskNames];
 		newTaskNames.push(name);
 		setOrderedTaskNames(newTaskNames);
-
 		console.log(JSON.stringify(allReminders));
 	};
 
