@@ -3,7 +3,7 @@
 # Here with your daily dosage of disassociation and insults
 
 ## Things to do
-- [ ] data storage (sqlite or async storage)
+- [ ] async storage
 - [ ] notifs
 - [ ] ?? do we need redux for this
 

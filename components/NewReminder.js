@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, TouchableHighlight, View, TextInput, Button, Platform } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-export default function NewReminder() {
+export default function NewReminder({ insertData }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [taskName, onTaskNameChange] = useState("");
 
@@ -10,7 +10,16 @@ export default function NewReminder() {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(true);
 
+  // useEffect(() => {
+  //   const currentDate = date;
+  //   setShow(Platform.OS === 'ios');
+  //   setDate(currentDate);
+  // }, [])
+
+
   const onChange = (event, selectedDate) => {
+    console.log("selected: " + selectedDate);
+    console.log("before change date: " + date);
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
@@ -21,13 +30,20 @@ export default function NewReminder() {
     setMode(currentMode);
   };
 
-  const showDatepicker = () => {
-    showMode('date');
+  const saveData = () => {
+    console.log("saved date!!!: " + date);
+    console.log(taskName);
+    if (taskName){
+      setModalVisible(!modalVisible); 
+      insertData(taskName, {"date": date});
+    }
+    else {
+      console.log("task name required");
+    }
   };
 
-  const showTimepicker = () => {
-    showMode('time');
-  };
+  const showDatepicker = () => { showMode('date'); };
+  const showTimepicker = () => { showMode('time'); };
 
   return (
     <View style={styles.centeredView}>
@@ -35,9 +51,6 @@ export default function NewReminder() {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        // onRequestClose={() => {
-        //   Alert.alert("Modal has been closed.");
-        // }}
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -75,7 +88,7 @@ export default function NewReminder() {
                 onPress={() => { setModalVisible(!modalVisible); }}
                 title="Cancel" />
               <Button style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                onPress={() => { setModalVisible(!modalVisible); }}
+                onPress={saveData}
                 title="Save" />
             </View>
 
