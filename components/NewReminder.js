@@ -4,38 +4,29 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function NewReminder({ insertData }) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [taskName, onTaskNameChange] = useState("");
+  const [title, onChangeTitle] = useState("");
 
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(true);
 
   useEffect(() => {
-    const currentDate = date;
-    setShow(Platform.OS === 'ios');
-    setDate(currentDate);
-  }, [])
+    setDate(new Date());
+    setMode('date');
+  }, [modalVisible]);
 
-  const onChange = (event, selectedDate) => {
-    console.log("selected: " + selectedDate);
-    console.log("before change date: " + date);
+  const onChangeTime = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
 
   const showMode = (currentMode) => {
-    setShow(true);
     setMode(currentMode);
   };
 
   const saveData = () => {
-    console.log("saved date!!!: " + date);
-    console.log(taskName);
-    if (taskName){
+    if (title){
       setModalVisible(!modalVisible); 
-      insertData({"title": taskName, "date": date});
-      console.log("just inserted data from component");
+      insertData({"title": title, "date": date});
     }
     else {
       console.log("task name required");
@@ -57,9 +48,9 @@ export default function NewReminder({ insertData }) {
 
             <View style={styles.horizontalContainer}>
               <TextInput
-                style={{...styles.modalText, ...styles.taskName}}
-                onChangeText = {text => onTaskNameChange(text)}
-                value = {taskName}
+                style={{...styles.modalText, ...styles.title}}
+                onChangeText = {text => onChangeTitle(text)}
+                value = {title}
                 placeholder = "Task name..."
               />
             </View>
@@ -78,17 +69,17 @@ export default function NewReminder({ insertData }) {
                 mode={mode}
                 is24Hour={true}
                 display="default"
-                onChange={onChange} 
+                onChange={onChangeTime} 
               />
             </View>
 
             <View style={styles.horizontalContainer}>
-              <Button style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                onPress={() => { setModalVisible(!modalVisible); }}
-                title="Cancel" />
-              <Button style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                onPress={saveData}
-                title="Save" />
+              <Button style={styles.openButton}
+                title="Cancel"
+                onPress={() => { setModalVisible(!modalVisible); }} />
+              <Button style={styles.openButton}
+                title="Save" 
+                onPress={saveData} /> 
             </View>
 
           </View>
@@ -151,7 +142,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     margin: 4
   }, 
-  taskName: {
+  title: {
     fontSize: 28, 
     padding: 15, 
     height: 50, 

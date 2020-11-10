@@ -21,6 +21,7 @@ export default function TabOneScreen() {
 
 	const [allReminders, setAllReminders] = useState([...defaultData]);
 
+	// For dev use; re-initialize data at any time
 	const setDefaultData = async () => {
 		const newReminders = [...defaultData];
 		const dataToStore = JSON.stringify({"data": newReminders});
@@ -55,18 +56,15 @@ export default function TabOneScreen() {
 	}
 
 	useEffect(() => {
-
 		getData().then((arrReminders) => {
 			console.log("useEffect jsonReminders: " + JSON.stringify(arrReminders));
 			setAllReminders(arrReminders);
 		}, () => {
-			console.log("error");
 			setAllReminders(defaultData);
 		});
+	}, []);
 
-	}, [])
-
-	const renderItem = ({ item }) => (
+	const renderItem = ({ item, index }) => (
 		<View>
 			<Text>{ item.title }: { JSON.stringify(item.date) }</Text>
 		</View>
@@ -75,9 +73,7 @@ export default function TabOneScreen() {
   return (
     <View style={styles.container}>
 
-			<Button style={{ backgroundColor: "#2196F3" }}
-				onPress={setDefaultData}
-				title="set default Data" />
+			<Button onPress={setDefaultData} title="reset to default Data" />
 
 			<NewReminder insertData={storeData}/>
 
@@ -90,7 +86,6 @@ export default function TabOneScreen() {
 
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
 
     </View>
   );
