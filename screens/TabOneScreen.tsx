@@ -4,47 +4,35 @@ import { StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
 import { Text, View } from '../components/Themed';
-// import DateTimePicker from '@react-native-community/datetimepicker';
-
  
-const DATA = [
-  {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
-    title: "First Item",
-  },
-  {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
-    title: "Second Item",
-  },
-  {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
-    title: "Third Item",
-  },
-];
-
-
 export default function TabOneScreen() {
 
-	const [allReminders, setAllReminders] = useState({
-		"task1": {"date": new Date(1598051730000)}, 
-		"task2": {"date": new Date(1598056000000)}
-	});
-	const [orderedTaskNames, setOrderedTaskNames] = useState(["task1", "task2"]);
+	const [allReminders, setAllReminders] = useState([
+		{
+			"title": "task1", 
+			"date": new Date(1598051730000)
+		}, 
+		{
+			"title": "task2",
+			"date": new Date(1598056000000)
+		} 
+	]);
 
-	const addReminder = (name, contents) => {
-		const newReminders = allReminders;
-		newReminders[name] = contents;
+	const addReminder = (contents) => {
+		const newReminders = [...allReminders];
+		newReminders.push(contents);
 		setAllReminders(newReminders);
-
-		const newTaskNames = [...orderedTaskNames];
-		newTaskNames.push(name);
-		setOrderedTaskNames(newTaskNames);
-		console.log(JSON.stringify(allReminders));
 	};
+
+  // useEffect(() => {
+  //   const currentDate = date;
+  //   setShow(Platform.OS === 'ios');
+  //   setDate(currentDate);
+  // }, [])
 
 	const renderItem = ({ item }) => (
 		<View>
-			<Text>{ item }: { JSON.stringify(allReminders[item]["date"]) }</Text>
+			<Text>{ item.title }: { JSON.stringify(item.date) }</Text>
 		</View>
 	);
 
@@ -54,7 +42,7 @@ export default function TabOneScreen() {
 
 			<SafeAreaView style={{flex: 1}} >
 				<FlatList
-					data={orderedTaskNames}
+					data={allReminders}
 					renderItem={renderItem}
 				/>
 			</SafeAreaView>

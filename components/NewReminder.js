@@ -10,12 +10,11 @@ export default function NewReminder({ insertData }) {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(true);
 
-  // useEffect(() => {
-  //   const currentDate = date;
-  //   setShow(Platform.OS === 'ios');
-  //   setDate(currentDate);
-  // }, [])
-
+  useEffect(() => {
+    const currentDate = date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+  }, [])
 
   const onChange = (event, selectedDate) => {
     console.log("selected: " + selectedDate);
@@ -35,7 +34,7 @@ export default function NewReminder({ insertData }) {
     console.log(taskName);
     if (taskName){
       setModalVisible(!modalVisible); 
-      insertData(taskName, {"date": date});
+      insertData({"title": taskName, "date": date});
     }
     else {
       console.log("task name required");
@@ -54,7 +53,6 @@ export default function NewReminder({ insertData }) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-
 
             <View style={styles.horizontalContainer}>
               <TextInput
