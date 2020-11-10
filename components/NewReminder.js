@@ -35,6 +35,7 @@ export default function NewReminder({ insertData }) {
     if (taskName){
       setModalVisible(!modalVisible); 
       insertData({"title": taskName, "date": date});
+      console.log("just inserted data from component");
     }
     else {
       console.log("task name required");

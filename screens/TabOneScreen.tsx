@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { StyleSheet, FlatList, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, FlatList, SafeAreaView, Button } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
 import { Text, View } from '../components/Themed';
- 
+
 export default function TabOneScreen() {
 
-	const [allReminders, setAllReminders] = useState([
+	const defaultData = [
 		{
 			"title": "task1", 
 			"date": new Date(1598051730000)
@@ -16,19 +17,54 @@ export default function TabOneScreen() {
 			"title": "task2",
 			"date": new Date(1598056000000)
 		} 
-	]);
+	];
 
-	const addReminder = (contents) => {
-		const newReminders = [...allReminders];
-		newReminders.push(contents);
-		setAllReminders(newReminders);
+	const [allReminders, setAllReminders] = useState([...defaultData]);
+
+	const setDefaultData = async () => {
+		const newReminders = [...defaultData];
+		const dataToStore = JSON.stringify({"data": newReminders});
+		try {
+			await AsyncStorage.setItem('@reminder_data', dataToStore);
+			setAllReminders(newReminders);
+		} catch(e){
+			console.log("Error storing data: " + e);
+		}
 	};
 
-  // useEffect(() => {
-  //   const currentDate = date;
-  //   setShow(Platform.OS === 'ios');
-  //   setDate(currentDate);
-  // }, [])
+	const storeData = async (contents) => {
+		const newReminders = [...allReminders];
+		newReminders.push(contents);
+		const dataToStore = JSON.stringify({"data": newReminders});
+		try {
+			await AsyncStorage.setItem('@reminder_data', dataToStore);
+			setAllReminders(newReminders);
+		} catch(e){
+			console.log("Error storing data: " + e);
+		}
+	};
+
+	const getData = async () => {
+		try {
+			const stringReminders = await AsyncStorage.getItem('@reminder_data')
+			console.log("returned stored object: " + JSON.stringify(stringReminders));
+			return jsonReminders = (stringReminders != null) ? JSON.parse(stringReminders).data : null;
+		} catch (e) {
+			console.log("Error loading data: " + e);
+		}
+	}
+
+	useEffect(() => {
+
+		getData().then((arrReminders) => {
+			console.log("useEffect jsonReminders: " + JSON.stringify(arrReminders));
+			setAllReminders(arrReminders);
+		}, () => {
+			console.log("error");
+			setAllReminders(defaultData);
+		});
+
+	}, [])
 
 	const renderItem = ({ item }) => (
 		<View>
@@ -38,7 +74,12 @@ export default function TabOneScreen() {
 
   return (
     <View style={styles.container}>
-			<NewReminder insertData={addReminder}/>
+
+			<Button style={{ backgroundColor: "#2196F3" }}
+				onPress={setDefaultData}
+				title="set default Data" />
+
+			<NewReminder insertData={storeData}/>
 
 			<SafeAreaView style={{flex: 1}} >
 				<FlatList
@@ -49,6 +90,7 @@ export default function TabOneScreen() {
 
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+
 
     </View>
   );
