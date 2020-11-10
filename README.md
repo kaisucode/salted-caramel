@@ -1,8 +1,9 @@
 
 # About
 
-Salted Caramel, because this app is very salty about you not finishing your tasks
-Here with your daily dosage of disassociation and insults
+Salted Caramel, because this app is very salty about you not finishing your tasks. 
+
+Here with your daily dosage of dissociation and insults
 
 ## Things to do
 
