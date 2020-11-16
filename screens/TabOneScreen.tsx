@@ -4,19 +4,21 @@ import AsyncStorage from '@react-native-community/async-storage';
 import * as Notifications from 'expo-notifications';
 import { SwipeRow, SwipeListView } from 'react-native-swipe-list-view';
 
+import { Text, View } from '../components/Themed';
 import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
-import { Text, View } from '../components/Themed';
-import TabTwoScreen from './TabTwoScreen';
+import SaltySwipeList from '../components/SaltySwipeList';
 
 export default function TabOneScreen() {
 
 	const defaultData = [
 		{
+			"key": "5078cf4c-5ff4-4aa4-9a05-2271f2d175fc", 
 			"title": "task1", 
 			"date": new Date(1598051730000)
 		}, 
 		{
+			"key": "e48be5d3-30f5-48a3-8481-b1d961be784f",
 			"title": "task2",
 			"date": new Date(1598056000000)
 		} 
@@ -40,10 +42,7 @@ export default function TabOneScreen() {
 				title: "Plz get back to work",
 				body: "Scheduled Reminder: blah",
 			},
-			// trigger: null,
-			trigger: {
-				seconds: 3
-			},
+			trigger: null,
 		});
 	};
 
@@ -79,7 +78,6 @@ export default function TabOneScreen() {
 
 	useEffect(() => {
 		getData().then((arrReminders) => {
-			console.log("useEffect jsonReminders: " + JSON.stringify(arrReminders));
 			setAllReminders(arrReminders);
 		}, () => {
 			setAllReminders(defaultData);
@@ -109,22 +107,8 @@ export default function TabOneScreen() {
 			<Button onPress={setDefaultData} title="reset to default data" />
 			<Button onPress={clearAllNotifications} title="clear all notifications" />
 
-			{
-				// <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-				// <FlatList
-				//     data={allReminders}
-				//     renderItem={({ item, index }) => (
-				//       <View>
-				//         <Text>{ item.title }: { JSON.stringify(item.date) }</Text>
-				//       </View>
-				//   )}
-				//   keyExtractor={(item, index) => index.toString()}
-				// />
-			}
-
-
     </View>
-		<TabTwoScreen/>
+		<SaltySwipeList listData={allReminders}/>
     </View>
   );
 }

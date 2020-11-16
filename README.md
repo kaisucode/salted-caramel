@@ -9,7 +9,9 @@ Here with your daily dosage of dissociation and insults
 
 - [x] async storage
 - [x] notifications
-- [ ] uuid
+- [x] uuid
+- [x] refactor reminder generator
+- [ ] store notifications for deletion
 - [ ] edit reminders
 - [ ] delete reminders
 - [ ] check off reminders

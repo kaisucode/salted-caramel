@@ -12,6 +12,7 @@ import {
   Platform 
 } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function NewReminder({ insertData }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,7 +39,7 @@ export default function NewReminder({ insertData }) {
     if (title){
       date.setSeconds(0);
       setModalVisible(!modalVisible); 
-      insertData({"title": title, "date": date});
+      insertData({"key": uuidv4(), "title": title, "date": date});
     }
     else {
       console.log("task name required");
