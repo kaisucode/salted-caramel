@@ -6,31 +6,9 @@ import { Text, View } from '../components/Themed';
 
 import { TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import * as Notifications from 'expo-notifications';
 
-export default function SaltySwipeList({ listData }) {
-  // const [listData, setListData] = useState(
-  //   Array(20)
-  //   .fill('')
-  //   .map((_, i) => ({ 
-  //     key: `${i}`, 
-  //     text: `item #${i}` 
-  //   }))
-  // );
-  
-  // const defaultData = [
-  //   {
-  //     "key": "5078cf4c-5ff4-4aa4-9a05-2271f2d175fc", 
-  //     "title": "task1", 
-  //     "date": Date(1598051730000)
-  //   }, 
-  //   {
-  //     "key": "e48be5d3-30f5-48a3-8481-b1d961be784f",
-  //     "title": "task2",
-  //     "date": Date(1598056000000)
-  //   } 
-  // ];
-
-  // const [listData, setListData] = useState([...defaultData]);
+export default function SaltySwipeList({ listData, setListData }) {
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -38,22 +16,32 @@ export default function SaltySwipeList({ listData }) {
     }
   };
 
-  const deleteRow = (rowMap, rowKey) => {
+  const deleteRow = async (rowMap, rowKey) => {
     closeRow(rowMap, rowKey);
     const newData = [...listData];
     const prevIndex = listData.findIndex(item => item.key === rowKey);
+    const notifID = listData[prevIndex].notificationID;
     newData.splice(prevIndex, 1);
     setListData(newData);
+    try {
+      await Notifications.cancelScheduledNotificationAsync(notifID);
+    } catch(e){
+      console.log("deleteRow: failed to cancel scheduled notification");
+      console.log(e);
+    }
   };
 
   const onRowDidOpen = rowKey => {
-    console.log('This row opened', rowKey);
+    // console.log('This row opened', rowKey);
   };
 
   const renderItem = data => (
     <View style={styles.rowFront}>
       <Text>{data.item.title}</Text>
-      <Text>{JSON.stringify(data.item.date)}</Text>
+      {
+        // <Text>{JSON.stringify(data.item.date)}</Text>
+      }
+      <Text>{"" + (data.item.date)}</Text>
     </View>
   );
 
@@ -101,16 +89,15 @@ export default function SaltySwipeList({ listData }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#343d46',
     flex: 1,
-    // width: '100%'
   },
   backTextWhite: {
     color: '#FFF',
   },
   rowFront: {
     alignItems: 'center',
-    backgroundColor: '#CCC',
+    backgroundColor: '#343d46',
     borderBottomColor: 'black',
     borderBottomWidth: 1,
     justifyContent: 'center',
@@ -118,7 +105,7 @@ const styles = StyleSheet.create({
   },
   rowBack: {
     alignItems: 'center',
-    backgroundColor: '#DDD',
+    backgroundColor: '#343d46',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -22,6 +22,7 @@ export default function NewReminder({ insertData }) {
   const [mode, setMode] = useState('date');
 
   useEffect(() => {
+    onChangeTitle("");
     setDate(new Date());
     setMode('date');
   }, [modalVisible]);

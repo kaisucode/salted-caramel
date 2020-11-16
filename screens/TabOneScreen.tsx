@@ -15,12 +15,14 @@ export default function TabOneScreen() {
 		{
 			"key": "5078cf4c-5ff4-4aa4-9a05-2271f2d175fc", 
 			"title": "task1", 
-			"date": new Date(1598051730000)
+			"date": new Date(1598051730000), 
+			"notificationID": "blah2"
 		}, 
 		{
 			"key": "e48be5d3-30f5-48a3-8481-b1d961be784f",
 			"title": "task2",
-			"date": new Date(1598056000000)
+			"date": new Date(1598056000000), 
+			"notificationID": "blah"
 		} 
 	];
 
@@ -48,7 +50,17 @@ export default function TabOneScreen() {
 
 	const storeData = async (contents) => {
 		const newReminders = [...allReminders];
+		const notifID = await Notifications.scheduleNotificationAsync({
+			content: {
+				title: "Plz get back to work",
+				body: "Scheduled Reminder: " + contents.title,
+			},
+			trigger: contents.date
+		});
+
+		contents["notificationID"] = notifID;
 		newReminders.push(contents);
+
 		const dataToStore = JSON.stringify({"data": newReminders});
 		try {
 			await AsyncStorage.setItem('@reminder_data', dataToStore);
@@ -56,14 +68,6 @@ export default function TabOneScreen() {
 		} catch(e){
 			console.log("Error storing data: " + e);
 		}
-
-		Notifications.scheduleNotificationAsync({
-			content: {
-				title: "Plz get back to work",
-				body: "Scheduled Reminder: " + contents.title,
-			},
-			trigger: contents.date
-		});
 	};
 
 	const getData = async () => {
@@ -74,6 +78,10 @@ export default function TabOneScreen() {
 		} catch (e) {
 			console.log("Error loading data: " + e);
 		}
+	}
+
+	const changeReminderData = (newData) => {
+		setAllReminders(newData);
 	}
 
 	useEffect(() => {
@@ -108,7 +116,7 @@ export default function TabOneScreen() {
 			<Button onPress={clearAllNotifications} title="clear all notifications" />
 
     </View>
-		<SaltySwipeList listData={allReminders}/>
+		<SaltySwipeList listData={allReminders} setListData={changeReminderData}/>
     </View>
   );
 }

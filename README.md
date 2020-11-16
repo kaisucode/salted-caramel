@@ -11,9 +11,9 @@ Here with your daily dosage of dissociation and insults
 - [x] notifications
 - [x] uuid
 - [x] refactor reminder generator
-- [ ] store notifications for deletion
+- [x] store notifications for deletion
+- [x] delete reminders
 - [ ] edit reminders
-- [ ] delete reminders
 - [ ] check off reminders
 - [ ] proper UI/UX
 
