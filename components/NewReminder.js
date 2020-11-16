@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Modal, StyleSheet, Text, TouchableHighlight, View, TextInput, Button, Platform } from "react-native";
+import { 
+  View, ScrollView, 
+  Text, TextInput, 
+  StyleSheet, 
+  Modal, 
+  Alert, 
+  Keyboard, 
+  TouchableHighlight, 
+  TouchableWithoutFeedback, 
+  Button, 
+  Platform 
+} from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function NewReminder({ insertData }) {
@@ -25,6 +36,7 @@ export default function NewReminder({ insertData }) {
 
   const saveData = () => {
     if (title){
+      date.setSeconds(0);
       setModalVisible(!modalVisible); 
       insertData({"title": title, "date": date});
     }
@@ -43,47 +55,49 @@ export default function NewReminder({ insertData }) {
         transparent={true}
         visible={modalVisible}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
 
-            <View style={styles.horizontalContainer}>
-              <TextInput
-                style={{...styles.modalText, ...styles.title}}
-                onChangeText = {text => onChangeTitle(text)}
-                value = {title}
-                placeholder = "Task name..."
-              />
+              <View style={styles.horizontalContainer}>
+                <TextInput
+                  style={{...styles.modalText, ...styles.title}}
+                  onChangeText = {text => onChangeTitle(text)}
+                  value = {title}
+                  placeholder = "Task name..."
+                />
+              </View>
+
+              <Text style={styles.modalText}>New Task that you are probably going to procrastinate on</Text>
+
+              <View style={styles.horizontalContainer}>
+                <Button onPress={showDatepicker} title="Set date" />
+                <Button onPress={showTimepicker} title="Set time" />
+              </View>
+
+              <View style={{width: "100%"}}>
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChangeTime} 
+                />
+              </View>
+
+              <View style={styles.horizontalContainer}>
+                <Button style={styles.openButton}
+                  title="Cancel"
+                  onPress={() => { setModalVisible(!modalVisible); }} />
+                <Button style={styles.openButton}
+                  title="Save" 
+                  onPress={saveData} /> 
+              </View>
+
             </View>
-
-            <Text style={styles.modalText}>New Task that you are probably going to procrastinate on</Text>
-
-            <View style={styles.horizontalContainer}>
-              <Button onPress={showDatepicker} title="Set date" />
-              <Button onPress={showTimepicker} title="Set time" />
-            </View>
-
-            <View style={{width: "100%"}}>
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChangeTime} 
-              />
-            </View>
-
-            <View style={styles.horizontalContainer}>
-              <Button style={styles.openButton}
-                title="Cancel"
-                onPress={() => { setModalVisible(!modalVisible); }} />
-              <Button style={styles.openButton}
-                title="Save" 
-                onPress={saveData} /> 
-            </View>
-
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
 
       <TouchableHighlight

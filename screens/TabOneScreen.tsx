@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, SafeAreaView, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import * as Notifications from 'expo-notifications';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
@@ -31,6 +32,17 @@ export default function TabOneScreen() {
 		} catch(e){
 			console.log("Error storing data: " + e);
 		}
+		
+		Notifications.scheduleNotificationAsync({
+			content: {
+				title: "Plz get back to work",
+				body: "Scheduled Reminder: blah",
+			},
+			// trigger: null,
+			trigger: {
+				seconds: 3
+			},
+		});
 	};
 
 	const storeData = async (contents) => {
@@ -43,6 +55,14 @@ export default function TabOneScreen() {
 		} catch(e){
 			console.log("Error storing data: " + e);
 		}
+
+		Notifications.scheduleNotificationAsync({
+			content: {
+				title: "Plz get back to work",
+				body: "Scheduled Reminder: " + contents.title,
+			},
+			trigger: contents.date
+		});
 	};
 
 	const getData = async () => {
@@ -62,25 +82,38 @@ export default function TabOneScreen() {
 		}, () => {
 			setAllReminders(defaultData);
 		});
+
+		// notification settings
+		Notifications.setNotificationHandler({
+			handleNotification: async () => ({
+				shouldShowAlert: true,
+				shouldPlaySound: false,
+				shouldSetBadge: false,
+			}),
+		});
 	}, []);
 
-	const renderItem = ({ item, index }) => (
-		<View>
-			<Text>{ item.title }: { JSON.stringify(item.date) }</Text>
-		</View>
-	);
+	const clearAllNotifications = async () => {
+		await Notifications.cancelAllScheduledNotificationsAsync();
+	}
 
   return (
     <View style={styles.container}>
 
-			<Button onPress={setDefaultData} title="reset to default Data" />
+			<Button onPress={setDefaultData} title="reset to default data" />
+			<Button onPress={clearAllNotifications} title="clear all notifications" />
 
 			<NewReminder insertData={storeData}/>
 
 			<SafeAreaView style={{flex: 1}} >
 				<FlatList
 					data={allReminders}
-					renderItem={renderItem}
+					renderItem={({ item, index }) => (
+						<View>
+							<Text>{ item.title }: { JSON.stringify(item.date) }</Text>
+						</View>
+					)}
+					keyExtractor={(item, index) => index.toString()}
 				/>
 			</SafeAreaView>
 
