@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, FlatList, SafeAreaView, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import * as Notifications from 'expo-notifications';
+import { SwipeRow, SwipeListView } from 'react-native-swipe-list-view';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
 import { Text, View } from '../components/Themed';
+import TabTwoScreen from './TabTwoScreen';
 
 export default function TabOneScreen() {
 
@@ -100,22 +102,22 @@ export default function TabOneScreen() {
   return (
     <View style={styles.container}>
 
+
 			<Button onPress={setDefaultData} title="reset to default data" />
 			<Button onPress={clearAllNotifications} title="clear all notifications" />
 
+			<TabTwoScreen/>
 			<NewReminder insertData={storeData}/>
 
-			<SafeAreaView style={{flex: 1}} >
-				<FlatList
-					data={allReminders}
-					renderItem={({ item, index }) => (
-						<View>
-							<Text>{ item.title }: { JSON.stringify(item.date) }</Text>
-						</View>
-					)}
-					keyExtractor={(item, index) => index.toString()}
-				/>
-			</SafeAreaView>
+			<FlatList
+				data={allReminders}
+				renderItem={({ item, index }) => (
+					<View>
+						<Text>{ item.title }: { JSON.stringify(item.date) }</Text>
+					</View>
+			)}
+			keyExtractor={(item, index) => index.toString()}
+		/>
 
       <Text style={styles.title}>Tab One</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />

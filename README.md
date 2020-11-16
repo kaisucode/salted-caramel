@@ -8,12 +8,12 @@ Here with your daily dosage of dissociation and insults
 ## Things to do
 
 - [x] async storage
+- [x] notifications
+- [ ] uuid
 - [ ] edit reminders
 - [ ] delete reminders
-- [ ] notifs with [Expo calendar](https://docs.expo.io/versions/latest/sdk/calendar/)
 - [ ] check off reminders
 - [ ] proper UI/UX
-- [ ] ?? do we need redux for this
 
 ## Instructions
 
