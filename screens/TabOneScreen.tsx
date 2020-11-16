@@ -100,28 +100,31 @@ export default function TabOneScreen() {
 	}
 
   return (
+    <View style={{flex: 1}}>
     <View style={styles.container}>
 
+			<Text style={styles.title}>Scheduled Reminders</Text>
+			<NewReminder insertData={storeData}/>
 
 			<Button onPress={setDefaultData} title="reset to default data" />
 			<Button onPress={clearAllNotifications} title="clear all notifications" />
 
-			<TabTwoScreen/>
-			<NewReminder insertData={storeData}/>
+			{
+				// <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+				// <FlatList
+				//     data={allReminders}
+				//     renderItem={({ item, index }) => (
+				//       <View>
+				//         <Text>{ item.title }: { JSON.stringify(item.date) }</Text>
+				//       </View>
+				//   )}
+				//   keyExtractor={(item, index) => index.toString()}
+				// />
+			}
 
-			<FlatList
-				data={allReminders}
-				renderItem={({ item, index }) => (
-					<View>
-						<Text>{ item.title }: { JSON.stringify(item.date) }</Text>
-					</View>
-			)}
-			keyExtractor={(item, index) => index.toString()}
-		/>
 
-      <Text style={styles.title}>Tab One</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
+    </View>
+		<TabTwoScreen/>
     </View>
   );
 }
