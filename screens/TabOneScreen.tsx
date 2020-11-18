@@ -9,7 +9,7 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
 import SaltySwipeList from '../components/SaltySwipeList';
 
-export default function TabOneScreen() {
+export default function TabOneScreen({ navigation }) {
 
 	const defaultData = [
 		{
@@ -105,19 +105,26 @@ export default function TabOneScreen() {
 		await Notifications.cancelAllScheduledNotificationsAsync();
 	}
 
+	React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+				<NewReminder style={styles.newReminderButton} insertData={storeData}/>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <View style={{flex: 1}}>
-    <View style={styles.container}>
-
-			<Text style={styles.title}>Scheduled Reminders</Text>
-			<NewReminder insertData={storeData}/>
+			<SaltySwipeList listData={allReminders} setListData={changeReminderData}/>
 
 			<Button onPress={setDefaultData} title="reset to default data" />
 			<Button onPress={clearAllNotifications} title="clear all notifications" />
-
-    </View>
-		<SaltySwipeList listData={allReminders} setListData={changeReminderData}/>
-    </View>
+			{
+				// <View style={styles.container}>
+				//   <Text style={styles.title}>Scheduled Reminders</Text>
+				// </View>
+			}
+		</View>
   );
 }
 
@@ -136,4 +143,11 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
+	newReminderButton: {
+		position: "absolute", 
+		top: 0,
+		backgroundColor: 'blue',
+		borderColor: "red", 
+		borderWidth: 1,
+	}, 
 });

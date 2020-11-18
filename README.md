@@ -14,7 +14,8 @@ Here with your daily dosage of dissociation and insults
 - [x] store notifications for deletion
 - [x] delete reminders
 - [ ] edit reminders
-- [ ] check off reminders
+- [ ] check off/mute reminders
+- [ ] recurring reminders
 - [ ] proper UI/UX
 
 ## Instructions

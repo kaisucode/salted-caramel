@@ -96,20 +96,24 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   rowFront: {
+    backgroundColor: '#F6BE9A',
+    backgroundColor: '#DDA778', 
+
     alignItems: 'center',
-    backgroundColor: '#343d46',
+    justifyContent: 'center',
+    height: 75,
     borderBottomColor: 'black',
     borderBottomWidth: 1,
-    justifyContent: 'center',
-    height: 50,
   },
   rowBack: {
-    alignItems: 'center',
     backgroundColor: '#343d46',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     paddingLeft: 15,
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
   },
   backRightBtn: {
     alignItems: 'center',
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
     width: 75,
   },
   backRightBtnLeft: {
-    backgroundColor: 'blue',
+    backgroundColor: 'purple',
     right: 75,
   },
   backRightBtnRight: {

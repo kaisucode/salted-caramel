@@ -51,6 +51,7 @@ export default function NewReminder({ insertData }) {
   const showTimepicker = () => { showMode('time'); };
 
   return (
+    <View style={styles.outerWrapperView}>
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
@@ -101,6 +102,7 @@ export default function NewReminder({ insertData }) {
           </View>
         </TouchableWithoutFeedback>
       </Modal>
+    </View>
 
       <TouchableHighlight
         style={styles.openButton}
@@ -108,13 +110,23 @@ export default function NewReminder({ insertData }) {
           setModalVisible(true);
         }}
       >
-        <Text style={styles.textStyle}>Add a new reminder</Text>
+
+        <Text style={styles.textStyle}>+</Text>
+
+        {
+          // <Text style={styles.textStyle}>Add a new reminder</Text>
+        }
       </TouchableHighlight>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  outerWrapperView: {
+    // position: "absolute", 
+    // top: 0, 
+    // right: 0
+  }, 
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -138,15 +150,20 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    backgroundColor: "#F194FF",
+    // backgroundColor: "#F194FF",
+    // padding: 10,
     borderRadius: 20,
-    padding: 10,
-    elevation: 2
+    elevation: 2, 
+
+    position: "relative", 
+    top: -15, 
+    right: 20
   },
   textStyle: {
     color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    fontSize: 30, 
+    // fontWeight: "bold",
+    // textAlign: "center", 
   },
   modalText: {
     marginBottom: 15,

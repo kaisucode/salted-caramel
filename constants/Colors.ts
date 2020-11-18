@@ -11,9 +11,17 @@ export default {
   },
   dark: {
     text: '#fff',
-    background: '#000',
+    // background: '#000',
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
+
+		background: '#02020A',
+		text: '#3D0000', 
+    // text: '#F6BE9A',
+    // tawny: '#A9714B',
+    // backgroundColor: '#B98D58', 
+    // backgroundColor: '#DDA778', 
+		// tawny = '#A9714B',
   },
 };

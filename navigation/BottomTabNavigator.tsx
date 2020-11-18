@@ -66,7 +66,7 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Salty Caramel' }}
+        options={{ headerTitle: 'Scheduled Reminders' }}
       />
     </TabTwoStack.Navigator>
   );
