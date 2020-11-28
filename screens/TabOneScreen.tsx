@@ -58,13 +58,19 @@ export default function TabOneScreen({ navigation }) {
 			seconds: numOfSeconds,
 			repeats: true
 		};
-		const notifID = await Notifications.scheduleNotificationAsync({
-			content: {
-				title: "Plz get back to work",
-				body: "Reminder: " + contents.title,
-			},
-			trigger: aTrigger
-		});
+
+		const notifID = ""
+		try {
+			notifID = await Notifications.scheduleNotificationAsync({
+				content: {
+					title: "Plz get back to work",
+					body: "Reminder: " + contents.title,
+				},
+				trigger: aTrigger
+			});
+		} catch (e) {
+			console.log(e);
+		}
 
 		contents["notificationID"] = notifID;
 		newReminders.push(contents);
