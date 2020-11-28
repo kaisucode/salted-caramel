@@ -27,6 +27,7 @@ export default function SaltySwipeList({ listData, setListData, updateReminder }
     setListData(newData);
     try {
       await Notifications.cancelScheduledNotificationAsync(notifID);
+      console.log("deleted notif for: " + listData[prevIndex].title);
     } catch(e){
       console.log("deleteRow: failed to cancel scheduled notification");
       console.log(e);

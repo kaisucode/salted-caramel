@@ -63,7 +63,7 @@ export default function TabOneScreen({ navigation }) {
 			const notifID = await Notifications.scheduleNotificationAsync({
 				content: {
 					title: "Salty Caramel: " + contents.title,
-					body: "Reminder: GET BACK TO WORK (insert randomized message)" + getRandomMessage("foo"),
+					body: getRandomMessage("foo"),
 				},
 				trigger: aTrigger
 			});
@@ -77,10 +77,13 @@ export default function TabOneScreen({ navigation }) {
 	}
 
 	const storeReminder = async (contents) => {
-		contents["notificationID"] = createNotificationFromReminder(contents);
-		const newReminders = [...allReminders];
-		newReminders.push(contents);
-		changeReminderData(newReminders);
+		createNotificationFromReminder(contents).then((newNotifID) => {
+			contents["notificationID"] = newNotifID;
+			console.log("notifID generated: " + JSON.stringify(contents));
+			const newReminders = [...allReminders];
+			newReminders.push(contents);
+			changeReminderData(newReminders);
+		}) 
 	};
 
 	const updateReminder = async (contents) => {
