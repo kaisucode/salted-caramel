@@ -53,13 +53,11 @@ export default function TabOneScreen({ navigation }) {
 
 	const storeData = async (contents) => {
 		const newReminders = [...allReminders];
-
+		const numOfSeconds = (contents.date.getHours() * 60 + contents.date.getMinutes()) * 60;
 		const aTrigger = (contents.isScheduled) ? contents.date : {
-			hours: contents.date.getHours(), 
-			minutes: contents.date.getMinutes(), 
+			seconds: numOfSeconds,
 			repeats: true
 		};
-
 		const notifID = await Notifications.scheduleNotificationAsync({
 			content: {
 				title: "Plz get back to work",
@@ -68,16 +66,8 @@ export default function TabOneScreen({ navigation }) {
 			trigger: aTrigger
 		});
 
-		console.log(JSON.stringify(newReminders));
-		console.log(newReminders.length);
-		console.log("---------");
 		contents["notificationID"] = notifID;
 		newReminders.push(contents);
-
-		console.log(JSON.stringify(newReminders));
-		console.log(newReminders.length);
-		console.log(contents.key);
-
 		changeReminderData(newReminders);
 	};
 
@@ -131,7 +121,7 @@ export default function TabOneScreen({ navigation }) {
 				<CreditsModal style={styles.newReminderButton} />
 			),
     });
-  }, [navigation]);
+  }, [navigation, allReminders]);
 
   return (
     <View style={{flex: 1}}>

@@ -53,9 +53,9 @@ export default function NewReminder({ insertData }) {
     }
 
     date.setSeconds(0);
-    setModalVisible(!modalVisible); 
     const newData = {"key": uuidv4(), "title": title, "date": date, "isScheduled": (mode == "datetime")}
     insertData(newData);
+    setModalVisible(!modalVisible); 
   };
 
   const showDatetime = () => { showMode('datetime'); };
