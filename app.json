@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "salted-caramel",
-    "slug": "salted-caramel",
+    "name": "salty-caramel",
+    "slug": "salty-caramel",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/salty-caramel-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/salty-caramel-splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#A75E3D"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,8 +23,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/images/salty-caramel-icon.png",
+        "backgroundColor": "#F1B591"
       }
     },
     "web": {
