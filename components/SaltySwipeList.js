@@ -71,16 +71,30 @@ export default function SaltySwipeList({ listData, setListData, updateReminder }
   const [shouldRenderEditor, setShouldRenderEditor] = useState(false);
 
   const editRow = async (rowMap, rowKey) => {
+    console.log("button pressed");
     const newData = [...listData];
     const targetIndex = listData.findIndex(item => item.key === rowKey);
 
     setReminderToBeEdited(listData[targetIndex]);
     setShouldRenderEditor(true);
     closeRow(rowMap, rowKey);
+    console.log("SaltySwipeList: editRow");
   };
 
   const receiveUpdatedContent = (content) => {
-    updateReminder(content);
+    console.log("SaltySwipeList: receiveUpdatedContent");
+
+    try {
+      console.log("trying to see if date works: checkpoint2");
+      console.log(content.date.getHours());
+      console.log(content.date.getMinutes());
+    } catch (e) {
+      console.log("DATE IS BROKEEEEEEEEEEEEEEEEEEEEN");
+    }
+
+
+    const newContent = {...content};
+    updateReminder(newContent);
     setShouldRenderEditor(false);
   }
 

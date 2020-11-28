@@ -17,6 +17,8 @@ Here with your daily dosage of dissociation and insults
 - [x] edit reminders (drop it in the same modal, prefilled with data) <-
 - [x] recurring reminders (extra datetime var, check if parameter empty) <- CalendarNotificationTrigger
 - [x] try-catch for outdated reminders
+- [ ] fix bug that happens when you edit recurring reminders
+- [ ] randomized messages
 - [ ] check off/mute reminders <-
 - [ ] easter egg
 

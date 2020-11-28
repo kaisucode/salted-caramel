@@ -25,8 +25,9 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
 
   useEffect(() => {
     if (isNewReminder){
+      let newDate = new Date();
       onChangeTitle("");
-      setDate(new Date());
+      setDate(newDate);
       setMode('datetime');
     }
     else{
@@ -38,9 +39,28 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
     }
   }, [modalVisible]);
 
+  useEffect(() => {
+    if (!isNewReminder){
+      console.log("modal rendered!!");
+      onChangeTitle(oldReminderData.title);
+      setDate(oldReminderData.date);
+      console.log("date: " + JSON.stringify(oldReminderData.date));
+      const curMode = (oldReminderData.isScheduled) ? "datetime" : "countdown";
+      setMode(curMode);
+      setModalVisible(true);
+    }
+  }, []);
+
   const onChangeTime = (event, selectedDate) => {
     const currentDate = selectedDate || date;
+
+    if (isNewReminder){
+      currentDate.setSeconds(0);
+    }
+
     setDate(currentDate);
+    console.log("new DATE:         " + JSON.stringify(date));
+    console.log("currentDate:         " + JSON.stringify(currentDate));
   };
 
   const showMode = (currentMode) => {
@@ -49,7 +69,7 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
     const newDate = new Date();
     if (currentMode == "countdown")
     {
-      newDate.setMinutes(10);
+      newDate.setMinutes(1); // just one minute for testing
       newDate.setHours(0);
     }
     setDate(newDate);
@@ -61,11 +81,20 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
       return;
     }
 
-    date.setSeconds(0);
-
     const keyToUse = (isNewReminder) ? uuidv4() : oldReminderData.key;
-
     const newData = {"key": keyToUse, "title": title, "date": date, "isScheduled": (mode == "datetime")}
+    console.log("NewReminder: saving and inserting data");
+
+
+    try {
+      console.log("trying to see if date works: checkpoint1");
+      console.log(date.getHours());
+      console.log(date.getMinutes());
+    } catch (e) {
+      console.log("DATE IS BROKEEEEEEEEEEEEEEEEEEEEN");
+    }
+
+
     insertData(newData);
 
     setModalVisible(!modalVisible); 
@@ -94,6 +123,15 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
             <View style={styles.modalView}>
 
               <View style={styles.horizontalContainer}>
+                <Button style={styles.openButton}
+                  title="Cancel"
+                  onPress={cancelSaveData} />
+                <Button style={styles.openButton}
+                  title="Save" 
+                  onPress={saveData} /> 
+              </View>
+
+              <View style={styles.horizontalContainer}>
                 <TextInput
                   style={{...styles.modalText, ...styles.title}}
                   onChangeText = {text => onChangeTitle(text)}
@@ -118,15 +156,6 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
                   display="default"
                   onChange={onChangeTime} 
                 />
-              </View>
-
-              <View style={styles.horizontalContainer}>
-                <Button style={styles.openButton}
-                  title="Cancel"
-                  onPress={cancelSaveData} />
-                <Button style={styles.openButton}
-                  title="Save" 
-                  onPress={saveData} /> 
               </View>
 
             </View>

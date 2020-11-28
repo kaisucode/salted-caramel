@@ -9,6 +9,7 @@ import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
 import CreditsModal from '../components/CreditsModal';
 import SaltySwipeList from '../components/SaltySwipeList';
+import { getRandomMessage } from '../components/utils.js';
 
 export default function TabOneScreen({ navigation }) {
 
@@ -61,13 +62,15 @@ export default function TabOneScreen({ navigation }) {
 		try {
 			const notifID = await Notifications.scheduleNotificationAsync({
 				content: {
-					title: "Plz get back to work",
-					body: "Reminder: " + contents.title,
+					title: "Salty Caramel: " + contents.title,
+					body: "Reminder: GET BACK TO WORK (insert randomized message)" + getRandomMessage("foo"),
 				},
 				trigger: aTrigger
 			});
 			return notifID;
 		} catch(e) {
+			// in case the timestamp has already passed, in which case no notification needed, 
+			// and this is just to fill the list data to keep track of the title and timestamp
 			console.log(e);
 			return "";
 		}
@@ -81,6 +84,15 @@ export default function TabOneScreen({ navigation }) {
 	};
 
 	const updateReminder = async (contents) => {
+
+    try {
+      console.log("trying to see if date works: checkpoint3");
+      console.log(contents.date.getHours());
+      console.log(contents.date.getMinutes());
+    } catch (e) {
+      console.log("DATE IS BROKEEEEEEEEEEEEEEEEEEEEN");
+    }
+
     const targetIndex = allReminders.findIndex(item => item.key === contents.key);
 		const oldNotifID = contents["notificationID"];
     try {
@@ -93,7 +105,12 @@ export default function TabOneScreen({ navigation }) {
 		const updatedContents = {...contents};
 		const newReminders = [...allReminders];
 		updatedContents["notificationID"] = createNotificationFromReminder(contents);
+		console.log("TabOneScreen: updateReminder");
+		console.log("TabOneScreen: updateReminder: " + JSON.stringify(newReminders[targetIndex]));
 		newReminders[targetIndex] = updatedContents;
+		console.log("TabOneScreen: updateReminder: " + JSON.stringify(newReminders[targetIndex]));
+		console.log("TabOneScreen: contents: " + JSON.stringify(contents));
+		console.log("TabOneScreen: updatedcontents: " + JSON.stringify(updatedContents));
 		changeReminderData(newReminders);
 	}
 
