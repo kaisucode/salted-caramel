@@ -51,31 +51,51 @@ export default function TabOneScreen({ navigation }) {
 		});
 	};
 
-	const storeData = async (contents) => {
-		const newReminders = [...allReminders];
+	const createNotificationFromReminder = async (contents) => {
 		const numOfSeconds = (contents.date.getHours() * 60 + contents.date.getMinutes()) * 60;
 		const aTrigger = (contents.isScheduled) ? contents.date : {
 			seconds: numOfSeconds,
 			repeats: true
 		};
 
-		const notifID = ""
 		try {
-			notifID = await Notifications.scheduleNotificationAsync({
+			const notifID = await Notifications.scheduleNotificationAsync({
 				content: {
 					title: "Plz get back to work",
 					body: "Reminder: " + contents.title,
 				},
 				trigger: aTrigger
 			});
-		} catch (e) {
+			return notifID;
+		} catch(e) {
 			console.log(e);
+			return "";
 		}
+	}
 
-		contents["notificationID"] = notifID;
+	const storeReminder = async (contents) => {
+		contents["notificationID"] = createNotificationFromReminder(contents);
+		const newReminders = [...allReminders];
 		newReminders.push(contents);
 		changeReminderData(newReminders);
 	};
+
+	const updateReminder = async (contents) => {
+    const targetIndex = allReminders.findIndex(item => item.key === contents.key);
+		const oldNotifID = contents["notificationID"];
+    try {
+      await Notifications.cancelScheduledNotificationAsync(oldNotifID);
+    } catch(e){
+      console.log("deleteRow: failed to cancel scheduled notification");
+      console.log(e);
+    }
+
+		const updatedContents = {...contents};
+		const newReminders = [...allReminders];
+		updatedContents["notificationID"] = createNotificationFromReminder(contents);
+		newReminders[targetIndex] = updatedContents;
+		changeReminderData(newReminders);
+	}
 
 	const getData = async () => {
 		try {
@@ -121,7 +141,11 @@ export default function TabOneScreen({ navigation }) {
 	React.useLayoutEffect(() => {
     navigation.setOptions({
 			headerRight: () => (
-				<NewReminder style={styles.newReminderButton} insertData={storeData}/>
+				<NewReminder 
+					style={styles.newReminderButton} 
+					insertData={storeReminder} 
+					isNewReminder={true}
+				/>
 			),
 			headerLeft: () => (
 				<CreditsModal style={styles.newReminderButton} />
@@ -131,8 +155,7 @@ export default function TabOneScreen({ navigation }) {
 
   return (
     <View style={{flex: 1}}>
-			<SaltySwipeList listData={allReminders} setListData={changeReminderData}/>
-
+			<SaltySwipeList listData={allReminders} setListData={changeReminderData} updateReminder={updateReminder}/>
 			<Button onPress={setDefaultData} title="reset to default data" />
 			<Button onPress={clearAllNotifications} title="clear all notifications" />
 			{

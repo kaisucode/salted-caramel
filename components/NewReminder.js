@@ -14,7 +14,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function NewReminder({ insertData }) {
+export default function NewReminder({ insertData, isNewReminder, oldReminderData }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [title, onChangeTitle] = useState("");
 
@@ -24,9 +24,18 @@ export default function NewReminder({ insertData }) {
   const [mode, setMode] = useState('datetime');
 
   useEffect(() => {
-    onChangeTitle("");
-    setDate(new Date());
-    setMode('datetime');
+    if (isNewReminder){
+      onChangeTitle("");
+      setDate(new Date());
+      setMode('datetime');
+    }
+    else{
+      onChangeTitle(oldReminderData.title);
+      setDate(oldReminderData.date);
+      const curMode = (oldReminderData.isScheduled) ? "datetime" : "countdown";
+      setMode(curMode);
+      setModalVisible(true);
+    }
   }, [modalVisible]);
 
   const onChangeTime = (event, selectedDate) => {
@@ -53,10 +62,21 @@ export default function NewReminder({ insertData }) {
     }
 
     date.setSeconds(0);
-    const newData = {"key": uuidv4(), "title": title, "date": date, "isScheduled": (mode == "datetime")}
+
+    const keyToUse = (isNewReminder) ? uuidv4() : oldReminderData.key;
+
+    const newData = {"key": keyToUse, "title": title, "date": date, "isScheduled": (mode == "datetime")}
     insertData(newData);
+
     setModalVisible(!modalVisible); 
   };
+
+  const cancelSaveData = () => {
+    if (isNewReminder)
+      setModalVisible(!modalVisible);
+    else
+      insertData(oldReminderData);
+  }
 
   const showDatetime = () => { showMode('datetime'); };
   const showCountdown = () => { showMode('countdown'); };
@@ -103,7 +123,7 @@ export default function NewReminder({ insertData }) {
               <View style={styles.horizontalContainer}>
                 <Button style={styles.openButton}
                   title="Cancel"
-                  onPress={() => { setModalVisible(!modalVisible); }} />
+                  onPress={cancelSaveData} />
                 <Button style={styles.openButton}
                   title="Save" 
                   onPress={saveData} /> 
@@ -115,19 +135,17 @@ export default function NewReminder({ insertData }) {
       </Modal>
     </View>
 
-      <TouchableHighlight
-        style={styles.openButton}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      >
+      {isNewReminder &&
+        <TouchableHighlight
+          style={styles.openButton}
+          onPress={() => {
+            setModalVisible(true);
+          }}
+        >
 
-        <Text style={styles.textStyle}>+</Text>
-
-        {
-          // <Text style={styles.textStyle}>Add a new reminder</Text>
-        }
-      </TouchableHighlight>
+          <Text style={styles.textStyle}>+</Text>
+        </TouchableHighlight>
+      }
     </View>
   );
 };

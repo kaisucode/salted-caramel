@@ -14,7 +14,7 @@ Here with your daily dosage of dissociation and insults
 - [x] store notifications for deletion
 - [x] delete reminders
 
-- [ ] edit reminders (drop it in the same modal, prefilled with data) <-
+- [x] edit reminders (drop it in the same modal, prefilled with data) <-
 - [x] recurring reminders (extra datetime var, check if parameter empty) <- CalendarNotificationTrigger
 - [x] try-catch for outdated reminders
 - [ ] check off/mute reminders <-

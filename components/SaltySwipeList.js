@@ -8,7 +8,9 @@ import { TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from '
 import { SwipeListView } from 'react-native-swipe-list-view';
 import * as Notifications from 'expo-notifications';
 
-export default function SaltySwipeList({ listData, setListData }) {
+import NewReminder from './NewReminder';
+
+export default function SaltySwipeList({ listData, setListData, updateReminder }) {
 
   const closeRow = (rowMap, rowKey) => {
     if (rowMap[rowKey]) {
@@ -37,14 +39,12 @@ export default function SaltySwipeList({ listData, setListData }) {
 
   const renderItem = data => (
     <View style={styles.rowFront}>
-      {
-      // <Text>
-      //   {data.item.isScheduled
-      //     ? "Scheduled: "
-      //     : "Recurring: "
-      //   }
-      // </Text>
-      }
+      <Text>
+        {data.item.isScheduled
+          ? "Scheduled: "
+          : "Recurring: "
+        }
+      </Text>
       <Text>{data.item.title}</Text>
       <Text>{"" + (data.item.date)}</Text>
     </View>
@@ -52,10 +52,9 @@ export default function SaltySwipeList({ listData, setListData }) {
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
-      <Text>Left</Text>
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnLeft]}
-        onPress={() => closeRow(rowMap, data.item.key)}
+        onPress={() => editRow(rowMap, data.item.key)}
       >
         <Text style={styles.backTextWhite}>Edit</Text>
       </TouchableOpacity>
@@ -67,6 +66,23 @@ export default function SaltySwipeList({ listData, setListData }) {
       </TouchableOpacity>
     </View>
   );
+
+  const [reminderToBeEdited, setReminderToBeEdited] = useState({});
+  const [shouldRenderEditor, setShouldRenderEditor] = useState(false);
+
+  const editRow = async (rowMap, rowKey) => {
+    const newData = [...listData];
+    const targetIndex = listData.findIndex(item => item.key === rowKey);
+
+    setReminderToBeEdited(listData[targetIndex]);
+    setShouldRenderEditor(true);
+    closeRow(rowMap, rowKey);
+  };
+
+  const receiveUpdatedContent = (content) => {
+    updateReminder(content);
+    setShouldRenderEditor(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -88,6 +104,16 @@ export default function SaltySwipeList({ listData, setListData }) {
           closeOnRowBeginSwipe
         />
       </TouchableWithoutFeedback>
+
+      {shouldRenderEditor && 
+        <NewReminder 
+          style={styles.newReminderButton} 
+          insertData={receiveUpdatedContent} 
+          isNewReminder={false}
+          oldReminderData={reminderToBeEdited}
+        />
+      }
+
     </View>
   );
 }
