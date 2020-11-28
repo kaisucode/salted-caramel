@@ -13,9 +13,13 @@ Here with your daily dosage of dissociation and insults
 - [x] refactor reminder generator
 - [x] store notifications for deletion
 - [x] delete reminders
-- [ ] edit reminders
-- [ ] check off/mute reminders
-- [ ] recurring reminders
+
+- [ ] edit reminders (drop it in the same modal, prefilled with data) <-
+- [ ] recurring reminders (extra datetime var, check if parameter empty) <- CalendarNotificationTrigger
+- [ ] check off/mute reminders <-
+- [ ] easter egg
+
+- [ ] credits page
 - [ ] proper UI/UX
 
 ## Instructions

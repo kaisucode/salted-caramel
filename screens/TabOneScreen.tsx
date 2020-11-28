@@ -7,6 +7,7 @@ import { SwipeRow, SwipeListView } from 'react-native-swipe-list-view';
 import { Text, View } from '../components/Themed';
 import EditScreenInfo from '../components/EditScreenInfo';
 import NewReminder from '../components/NewReminder';
+import CreditsModal from '../components/CreditsModal';
 import SaltySwipeList from '../components/SaltySwipeList';
 
 export default function TabOneScreen({ navigation }) {
@@ -16,13 +17,15 @@ export default function TabOneScreen({ navigation }) {
 			"key": "5078cf4c-5ff4-4aa4-9a05-2271f2d175fc", 
 			"title": "task1", 
 			"date": new Date(1598051730000), 
-			"notificationID": "blah2"
+			"notificationID": "blah2", 
+			"isScheduled": true
 		}, 
 		{
 			"key": "e48be5d3-30f5-48a3-8481-b1d961be784f",
 			"title": "task2",
 			"date": new Date(1598056000000), 
-			"notificationID": "blah"
+			"notificationID": "blah", 
+			"isScheduled": false
 		} 
 	];
 
@@ -50,24 +53,32 @@ export default function TabOneScreen({ navigation }) {
 
 	const storeData = async (contents) => {
 		const newReminders = [...allReminders];
+
+		const aTrigger = (contents.isScheduled) ? contents.date : {
+			hours: contents.date.getHours(), 
+			minutes: contents.date.getMinutes(), 
+			repeats: true
+		};
+
 		const notifID = await Notifications.scheduleNotificationAsync({
 			content: {
 				title: "Plz get back to work",
-				body: "Scheduled Reminder: " + contents.title,
+				body: "Reminder: " + contents.title,
 			},
-			trigger: contents.date
+			trigger: aTrigger
 		});
 
+		console.log(JSON.stringify(newReminders));
+		console.log(newReminders.length);
+		console.log("---------");
 		contents["notificationID"] = notifID;
 		newReminders.push(contents);
 
-		const dataToStore = JSON.stringify({"data": newReminders});
-		try {
-			await AsyncStorage.setItem('@reminder_data', dataToStore);
-			setAllReminders(newReminders);
-		} catch(e){
-			console.log("Error storing data: " + e);
-		}
+		console.log(JSON.stringify(newReminders));
+		console.log(newReminders.length);
+		console.log(contents.key);
+
+		changeReminderData(newReminders);
 	};
 
 	const getData = async () => {
@@ -78,11 +89,17 @@ export default function TabOneScreen({ navigation }) {
 		} catch (e) {
 			console.log("Error loading data: " + e);
 		}
-	}
+	};
 
-	const changeReminderData = (newData) => {
-		setAllReminders(newData);
-	}
+	const changeReminderData = async (newData) => {
+		const dataToStore = JSON.stringify({"data": newData});
+		try {
+			await AsyncStorage.setItem('@reminder_data', dataToStore);
+			setAllReminders(newData);
+		} catch(e){
+			console.log("Error storing data: " + e);
+		}
+	};
 
 	useEffect(() => {
 		getData().then((arrReminders) => {
@@ -107,9 +124,12 @@ export default function TabOneScreen({ navigation }) {
 
 	React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
+			headerRight: () => (
 				<NewReminder style={styles.newReminderButton} insertData={storeData}/>
-      ),
+			),
+			headerLeft: () => (
+				<CreditsModal style={styles.newReminderButton} />
+			),
     });
   }, [navigation]);
 

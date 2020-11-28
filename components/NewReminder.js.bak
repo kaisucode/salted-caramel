@@ -6,10 +6,12 @@ import {
   Modal, 
   Alert, 
   Keyboard, 
+  TouchableOpacity, 
   TouchableHighlight, 
   TouchableWithoutFeedback, 
   Button, 
-  Platform 
+  Platform, 
+  Switch
 } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,15 +20,19 @@ export default function NewReminder({ insertData }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [title, onChangeTitle] = useState("");
 
-  const [isScheduledReminderMode, setIsScheduledReminderMode] = useState(true);
-
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('datetime');
 
+  const [modeSwitches, setModeSwitches] = useState({
+    "datetime": true, 
+    "countdown": false
+  });
+
+  // Initialization
   useEffect(() => {
     onChangeTitle("");
     setDate(new Date());
-    setMode('datetime');
+    setMode('date');
   }, [modalVisible]);
 
   const onChangeTime = (event, selectedDate) => {
@@ -36,30 +42,32 @@ export default function NewReminder({ insertData }) {
 
   const showMode = (currentMode) => {
     setMode(currentMode);
-
-    const newDate = new Date();
-    if (currentMode == "countdown")
-    {
-      newDate.setMinutes(10);
-      newDate.setHours(0);
-    }
-    setDate(newDate);
   };
 
   const saveData = () => {
-    if (!title){
-      console.log("task name required");
-      return;
+    if (title){
+      date.setSeconds(0);
+      setModalVisible(!modalVisible); 
+      insertData({"key": uuidv4(), "title": title, "date": date});
     }
-
-    date.setSeconds(0);
-    setModalVisible(!modalVisible); 
-    const newData = {"key": uuidv4(), "title": title, "date": date, "isScheduled": (mode == "datetime")}
-    insertData(newData);
+    else {
+      console.log("task name required");
+    }
   };
 
-  const showDatetime = () => { showMode('datetime'); };
-  const showCountdown = () => { showMode('countdown'); };
+  const showDatepicker = () => { showMode('date'); };
+  const showTimepicker = () => { showMode('time'); };
+
+  const changeReminderMode = (modeName) => {
+    var oldModeName = mode;
+    setMode(modeName);
+
+    var newModeSwitches = {...modeSwitches};
+    newModeSwitches[oldModeName] = false;
+    newModeSwitches[modeName] = true;
+
+    setModeSwitches(newModeSwitches);
+  };
 
   return (
     <View style={styles.outerWrapperView}>
@@ -74,6 +82,15 @@ export default function NewReminder({ insertData }) {
             <View style={styles.modalView}>
 
               <View style={styles.horizontalContainer}>
+                <Button style={styles.openButton}
+                  title="Cancel"
+                  onPress={() => { setModalVisible(!modalVisible); }} />
+                <Button style={styles.openButton}
+                  title="Save" 
+                  onPress={saveData} /> 
+              </View>
+
+              <View style={styles.horizontalContainer}>
                 <TextInput
                   style={{...styles.modalText, ...styles.title}}
                   onChangeText = {text => onChangeTitle(text)}
@@ -84,10 +101,28 @@ export default function NewReminder({ insertData }) {
 
               <Text style={styles.modalText}>New Task that you are probably going to procrastinate on</Text>
 
-              <View style={styles.horizontalContainer}>
-                <Button onPress={showDatetime} title="Scheduled" />
-                <Button onPress={showCountdown} title="Recurring" />
+              <View>
+                <TouchableOpacity onPress={showDatepicker}>
+                  <View style={styles.horizontalContainer}>
+                    <Text>Date: </Text>
+                    <Text>{JSON.stringify(date)}</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
+
+              <View style={styles.horizontalContainer}>
+                <Button onPress={showTimepicker} title="Time" />
+
+                <Switch
+                  onValueChange={() => { changeReminderMode("countdown") }}
+                  value={ modeSwitches["countdown"] }
+                >
+                </Switch>
+              </View>
+
+              {
+                // time from now
+              }
 
               <View style={{width: "100%"}}>
                 <DateTimePicker
@@ -98,15 +133,6 @@ export default function NewReminder({ insertData }) {
                   display="default"
                   onChange={onChangeTime} 
                 />
-              </View>
-
-              <View style={styles.horizontalContainer}>
-                <Button style={styles.openButton}
-                  title="Cancel"
-                  onPress={() => { setModalVisible(!modalVisible); }} />
-                <Button style={styles.openButton}
-                  title="Save" 
-                  onPress={saveData} /> 
               </View>
 
             </View>
@@ -167,8 +193,8 @@ const styles = StyleSheet.create({
     elevation: 2, 
 
     position: "relative", 
-    top: -15, 
-    right: 20
+    top: -12, 
+    right: 22
   },
   textStyle: {
     color: "white",
@@ -184,7 +210,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center', 
     justifyContent: 'center', 
-    margin: 4
+    margin: 4, 
+
+    // backgroundColor: "blue", 
+    // borderRadius: 10, 
+    // paddingLeft: 10,
+    // paddingRight: 10, 
+    // width: "100%"
   }, 
   title: {
     fontSize: 28, 

@@ -37,10 +37,15 @@ export default function SaltySwipeList({ listData, setListData }) {
 
   const renderItem = data => (
     <View style={styles.rowFront}>
-      <Text>{data.item.title}</Text>
       {
-        // <Text>{JSON.stringify(data.item.date)}</Text>
+      // <Text>
+      //   {data.item.isScheduled
+      //     ? "Scheduled: "
+      //     : "Recurring: "
+      //   }
+      // </Text>
       }
+      <Text>{data.item.title}</Text>
       <Text>{"" + (data.item.date)}</Text>
     </View>
   );
