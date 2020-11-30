@@ -14,26 +14,30 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
-  return (
-    <BottomTab.Navigator
-      initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
-      <BottomTab.Screen
-        name="Scheduled"
-        component={TabOneNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Recurring"
-        component={TabTwoNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
-        }}
-      />
-    </BottomTab.Navigator>
-  );
+	return TabOneNavigator();
+
+  // return (
+  //   <BottomTab.Navigator
+  //     initialRouteName="TabOne"
+  //     tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+  //     <BottomTab.Screen
+  //       name="Schedule"
+  //       component={TabOneNavigator}
+  //       options={{
+  //         tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+  //       }}
+  //     />
+	//     {
+	//       // <BottomTab.Screen
+	//       //   name="Recurring"
+	//       //   component={TabTwoNavigator}
+	//       //   options={{
+	//       //     tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+	//       //   }}
+	//       // />
+	//     }
+  //   </BottomTab.Navigator>
+  // );
 }
 
 // You can explore the built-in icon families and icons on the web at:
@@ -48,7 +52,7 @@ const TabOneStack = createStackNavigator<TabOneParamList>();
 
 function TabOneNavigator() {
   return (
-    <TabOneStack.Navigator>
+		<TabOneStack.Navigator>
       <TabOneStack.Screen
         name="TabOneScreen"
         component={TabOneScreen}

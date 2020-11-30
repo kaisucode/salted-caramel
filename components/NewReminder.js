@@ -7,21 +7,23 @@ import {
   Alert, 
   Keyboard, 
   TouchableHighlight, 
+  TouchableOpacity, 
   TouchableWithoutFeedback, 
   Button, 
   Platform 
 } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { v4 as uuidv4 } from 'uuid';
+import { Colors } from "../constants/Colors.ts";
 
 export default function NewReminder({ insertData, isNewReminder, oldReminderData }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [title, onChangeTitle] = useState("");
 
-  const [isScheduledReminderMode, setIsScheduledReminderMode] = useState(true);
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('datetime');
+  const [isScheduledReminderMode, setIsScheduledReminderMode] = useState(true);
 
   useEffect(() => {
     if (isNewReminder){
@@ -29,14 +31,15 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
       onChangeTitle("");
       setDate(newDate);
       setMode('datetime');
+      setIsScheduledReminderMode(true);
     }
-    else{
-      onChangeTitle(oldReminderData.title);
-      setDate(oldReminderData.date);
-      const curMode = (oldReminderData.isScheduled) ? "datetime" : "countdown";
-      setMode(curMode);
-      setModalVisible(true);
-    }
+    // else{
+    //   onChangeTitle(oldReminderData.title);
+    //   setDate(oldReminderData.date);
+    //   const curMode = (oldReminderData.isScheduled) ? "datetime" : "countdown";
+    //   setMode(curMode);
+    //   setModalVisible(true);
+    // }
   }, [modalVisible]);
 
   useEffect(() => {
@@ -45,8 +48,15 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
       onChangeTitle(oldReminderData.title);
       setDate(oldReminderData.date);
       console.log("date: " + JSON.stringify(oldReminderData.date));
-      const curMode = (oldReminderData.isScheduled) ? "datetime" : "countdown";
-      setMode(curMode);
+
+      if (oldReminderData.isScheduled){
+        setMode("datetime");
+        setIsScheduledReminderMode(true);
+      }
+      else{
+        setMode("countdown");
+        setIsScheduledReminderMode(false);
+      }
       setModalVisible(true);
     }
   }, []);
@@ -69,9 +79,12 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
     const newDate = new Date();
     if (currentMode == "countdown")
     {
+      setIsScheduledReminderMode(false);
       newDate.setMinutes(1); // just one minute for testing
       newDate.setHours(0);
     }
+    else
+      setIsScheduledReminderMode(true);
     setDate(newDate);
   };
 
@@ -119,16 +132,26 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
         visible={modalVisible}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
 
-              <View style={styles.horizontalContainer}>
-                <Button style={styles.openButton}
-                  title="Cancel"
-                  onPress={cancelSaveData} />
-                <Button style={styles.openButton}
-                  title="Save" 
-                  onPress={saveData} /> 
+              <View style={styles.buttonContainer}>
+
+                <View style={styles.buttonLeft}>
+                  <Button 
+                    style={styles.openButton}
+                    title="Cancel"
+                    color={Colors.text}
+                    onPress={cancelSaveData} />
+                </View>
+                <View style={styles.buttonRight}>
+                  <Button 
+                    style={styles.openButton}
+                    color={Colors.text}
+                    title="Save" 
+                    onPress={saveData} /> 
+                </View>
               </View>
 
               <View style={styles.horizontalContainer}>
@@ -143,8 +166,12 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
               <Text style={styles.modalText}>New Task that you are probably going to procrastinate on</Text>
 
               <View style={styles.horizontalContainer}>
-                <Button onPress={showDatetime} title="Scheduled" />
-                <Button onPress={showCountdown} title="Recurring" />
+                <View style={ isScheduledReminderMode ? styles.modeButtonContainerActivated : styles.modeButtonContainer}>
+                  <Button color={"white"} onPress={showDatetime} title="Scheduled" />
+                </View>
+                <View style={ isScheduledReminderMode ? styles.modeButtonContainer : styles.modeButtonContainerActivated}>
+                  <Button color={"white"} onPress={showCountdown} title="Recurring" />
+                </View>
               </View>
 
               <View style={{width: "100%"}}>
@@ -165,15 +192,14 @@ export default function NewReminder({ insertData, isNewReminder, oldReminderData
     </View>
 
       {isNewReminder &&
-        <TouchableHighlight
-          style={styles.openButton}
+        <TouchableOpacity
+          style={styles.newButton}
           onPress={() => {
             setModalVisible(true);
           }}
         >
-
           <Text style={styles.textStyle}>+</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       }
     </View>
   );
@@ -193,10 +219,13 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#c8a2c8",
+    backgroundColor: Colors.text,
+    backgroundColor: '#956354',
     width: "90%", 
+    width: '100%',
+    height: '90%',
     borderRadius: 20,
-    padding: 35,
+    padding: 30,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -207,23 +236,23 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
-  openButton: {
-    // backgroundColor: "#F194FF",
-    // padding: 10,
+  newButton: {
+    backgroundColor: 'transparent',
     borderRadius: 20,
     elevation: 2, 
 
     position: "relative", 
     top: -15, 
-    right: 20
+    right: 20,
   },
   textStyle: {
-    color: "white",
+    color: Colors.text,
     fontSize: 30, 
     // fontWeight: "bold",
     // textAlign: "center", 
   },
   modalText: {
+    color: Colors.text,
     marginBottom: 15,
     textAlign: "center"
   }, 
@@ -231,14 +260,56 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     alignItems: 'center', 
     justifyContent: 'center', 
-    margin: 4
+    margin: 4,
+    marginTop: 20
+  }, 
+  openButton: {
+    backgroundColor: "black",
+    // padding: 10,
+    // borderRadius: 20,
+    // elevation: 2, 
+
+    // position: "relative", 
+    // top: -15, 
+  },
+  buttonContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    // justifyContent: 'center', 
+    position: 'absolute',
+    width: '100%', 
+    top: 6,
+  }, 
+  buttonLeft: {
+    width: '50%', 
+    alignItems: 'flex-start', 
+    left: 0,
+  },
+  buttonRight: {
+    width: '50%', 
+    alignItems: 'flex-end', 
+    right: 0,
+  },
+  modeButtonContainer: {
+    backgroundColor: Colors.text,
+    padding: 2,
+    margin: 10,
+    borderRadius: 10, 
+  },
+  modeButtonContainerActivated: {
+    backgroundColor: Colors.text,
+    padding: 2,
+    margin: 10,
+    borderRadius: 10, 
+    borderColor: "white",
+    borderWidth: 2,
   }, 
   title: {
-    fontSize: 28, 
+    fontSize: 24, 
     padding: 15, 
-    height: 50, 
+    height: 60, 
     borderBottomWidth: 1, 
-    borderColor: "gray", 
+    borderColor: Colors.text, 
   }
 });
 

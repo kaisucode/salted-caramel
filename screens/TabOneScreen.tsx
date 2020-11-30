@@ -11,6 +11,8 @@ import CreditsModal from '../components/CreditsModal';
 import SaltySwipeList from '../components/SaltySwipeList';
 import { getRandomMessage } from '../components/utils.js';
 
+import { Colors } from "../constants/Colors.ts";
+
 export default function TabOneScreen({ navigation }) {
 
 	const defaultData = [
@@ -160,6 +162,8 @@ export default function TabOneScreen({ navigation }) {
 
 	React.useLayoutEffect(() => {
     navigation.setOptions({
+			headerStyle: { backgroundColor: Colors.header },
+			headerTintColor: Colors.text,
 			headerRight: () => (
 				<NewReminder 
 					style={styles.newReminderButton} 
@@ -178,11 +182,6 @@ export default function TabOneScreen({ navigation }) {
 			<SaltySwipeList listData={allReminders} setListData={changeReminderData} updateReminder={updateReminder}/>
 			<Button onPress={setDefaultData} title="reset to default data" />
 			<Button onPress={clearAllNotifications} title="clear all notifications" />
-			{
-				// <View style={styles.container}>
-				//   <Text style={styles.title}>Scheduled Reminders</Text>
-				// </View>
-			}
 		</View>
   );
 }

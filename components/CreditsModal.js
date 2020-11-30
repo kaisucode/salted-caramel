@@ -6,68 +6,55 @@ import {
   Modal, 
   Alert, 
   Keyboard, 
+  TouchableOpacity, 
   TouchableHighlight, 
   TouchableWithoutFeedback, 
   Button, 
   Platform 
 } from "react-native";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { v4 as uuidv4 } from 'uuid';
+import { Colors } from "../constants/Colors.ts";
 
 export default function CreditsModal() {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <View style={styles.outerWrapperView}>
-    <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+    <View>
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
 
-              <View style={styles.horizontalContainer}>
-                <Button style={styles.openButton}
-                  title="Done"
-                  onPress={() => { setModalVisible(!modalVisible); }} />
+                <View style={styles.horizontalContainer}>
+                  <Button style={styles.openButton} title="Done"
+                    onPress={() => { setModalVisible(!modalVisible); }} />
+                </View>
 
-                {
-                  // <Button style={styles.openButton}
-                  //   title="Save" 
-                  //   onPress={saveData} /> 
-                }
+                <Text style={styles.modalText}>
+                  Credits!!
+                </Text>
+
               </View>
-
-              <Text style={styles.modalText}>
-                Credits!!
-              </Text>
-
-
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
 
-      <TouchableHighlight
+      <TouchableOpacity
         style={styles.openButton}
         onPress={() => { setModalVisible(true); }}
       >
         <Text style={styles.textStyle}>?</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  outerWrapperView: {
-    // position: "absolute", 
-    // top: 0, 
-    // right: 0
-  }, 
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -101,7 +88,7 @@ const styles = StyleSheet.create({
     left: 22
   },
   textStyle: {
-    color: "white",
+    color: Colors.text,
     fontSize: 26, 
     // fontWeight: "bold",
     // textAlign: "center", 

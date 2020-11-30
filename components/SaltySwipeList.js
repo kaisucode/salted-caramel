@@ -3,12 +3,13 @@ import { StyleSheet } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import NewReminder from './NewReminder';
 
 import { TouchableOpacity, TouchableHighlight, TouchableWithoutFeedback } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import * as Notifications from 'expo-notifications';
 
-import NewReminder from './NewReminder';
+import { Colors } from "../constants/Colors.ts";
 
 export default function SaltySwipeList({ listData, setListData, updateReminder }) {
 
@@ -38,18 +39,21 @@ export default function SaltySwipeList({ listData, setListData, updateReminder }
     // console.log('This row opened', rowKey);
   };
 
-  const renderItem = data => (
-    <View style={styles.rowFront}>
-      <Text>
-        {data.item.isScheduled
-          ? "Scheduled: "
-          : "Recurring: "
-        }
-      </Text>
-      <Text>{data.item.title}</Text>
-      <Text>{"" + (data.item.date)}</Text>
-    </View>
-  );
+  const renderItem = data => {
+    const datetime = new Date(data.item.date)
+    const dateString = datetime.toDateString();
+    const hours = datetime.getHours();
+    const minutes = datetime.getMinutes();
+
+    const datetimeString = `${dateString} ${hours}:${minutes}`;
+    const prefix = (data.item.isScheduled) ? "Scheduled: " : "Recurring: ";
+
+    return (
+      <View style={styles.rowFront}>
+        <Text>{ prefix + data.item.title }</Text>
+        <Text>{ datetimeString }</Text>
+      </View>
+    )};
 
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
@@ -135,30 +139,38 @@ export default function SaltySwipeList({ listData, setListData, updateReminder }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#343d46',
+    // backgroundColor: '#343d46',
+    backgroundColor: Colors.backgroundColor,
+    backgroundColor: '#f6be9a',
+    backgroundColor: '#a9714B',
+    backgroundColor: Colors.gold,
     flex: 1,
+
+    borderTopColor: Colors.text,
+    borderTopWidth: 1,
   },
   backTextWhite: {
     color: '#FFF',
   },
   rowFront: {
-    backgroundColor: '#F6BE9A',
-    backgroundColor: '#DDA778', 
+    backgroundColor: '#a9714B',
+    backgroundColor: Colors.gold,
 
     alignItems: 'center',
     justifyContent: 'center',
     height: 75,
-    borderBottomColor: 'black',
+
+    borderBottomColor: Colors.text,
     borderBottomWidth: 1,
   },
   rowBack: {
-    backgroundColor: '#343d46',
+    // backgroundColor: '#343d46',
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
     flexDirection: 'row',
     paddingLeft: 15,
-    borderBottomColor: 'black',
+    borderBottomColor: Colors.text,
     borderBottomWidth: 1,
   },
   backRightBtn: {
@@ -170,7 +182,7 @@ const styles = StyleSheet.create({
     width: 75,
   },
   backRightBtnLeft: {
-    backgroundColor: 'purple',
+    backgroundColor: Colors.text,
     right: 75,
   },
   backRightBtnRight: {
