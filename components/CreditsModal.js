@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { Colors } from "../constants/Colors.ts";
 
-export default function CreditsModal() {
+export default function CreditsModal({ setDefaultData, clearAllNotifications }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -54,6 +54,15 @@ export default function CreditsModal() {
                   <Text style={styles.modalText}>
                     {"Special thanks to all the salted caramel lattes and cookies out there <3"}
                   </Text>
+                </View>
+
+                <View style={styles.horizontalContainer}>
+                  <View style={styles.buttonContainer}>
+                    <Button onPress={setDefaultData} color={Colors.yellow} title="Reset Data" />
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <Button onPress={clearAllNotifications} color={Colors.yellow} title="Clear Notifs" />
+                  </View>
                 </View>
 
               </View>
@@ -137,29 +146,31 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: -3, height: 3},
     textShadowRadius: 5,
 
-
     color: Colors.yellow,
     marginBottom: 15,
     textAlign: "center",
     fontSize: 14
   }, 
   horizontalContainer: {
+    width: '100%',
     flexDirection: 'row', 
     alignItems: 'center', 
     justifyContent: 'center', 
-    margin: 4
-  }, 
-  buttonContainer: {
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    position: 'absolute',
-    width: '100%', 
-    top: 6,
+    // margin: 4
   }, 
   textContainer: {
     paddingTop: 20, 
     paddingBottom: 30, 
+  },
+  buttonContainer: {
+    backgroundColor: Colors.text,
+    padding: 2,
+    paddingLeft: 8,
+    paddingRight: 8,
+
+    width: '50%',
+    margin: 10,
+    borderRadius: 10, 
   },
   title: {
     fontSize: 28, 

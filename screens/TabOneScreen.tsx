@@ -18,14 +18,14 @@ export default function TabOneScreen({ navigation }) {
 	const defaultData = [
 		{
 			"key": "5078cf4c-5ff4-4aa4-9a05-2271f2d175fc", 
-			"title": "task1", 
+			"title": "Welcome!", 
 			"date": new Date(1598051730000), 
 			"notificationID": "blah2", 
 			"isScheduled": true
 		}, 
 		{
 			"key": "e48be5d3-30f5-48a3-8481-b1d961be784f",
-			"title": "task2",
+			"title": "This is a very salty app",
 			"date": new Date(1598056000000), 
 			"notificationID": "blah", 
 			"isScheduled": false
@@ -172,7 +172,11 @@ export default function TabOneScreen({ navigation }) {
 				/>
 			),
 			headerLeft: () => (
-				<CreditsModal style={styles.newReminderButton} />
+				<CreditsModal 
+					style={styles.newReminderButton} 
+					setDefaultData={setDefaultData}
+					clearAllNotifications={clearAllNotifications}
+				/>
 			),
     });
   }, [navigation, allReminders]);
@@ -180,8 +184,6 @@ export default function TabOneScreen({ navigation }) {
   return (
     <View style={{flex: 1}}>
 			<SaltySwipeList listData={allReminders} setListData={changeReminderData} updateReminder={updateReminder}/>
-			<Button onPress={setDefaultData} title="reset to default data" />
-			<Button onPress={clearAllNotifications} title="clear all notifications" />
 		</View>
   );
 }
