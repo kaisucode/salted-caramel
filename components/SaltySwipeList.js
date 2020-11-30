@@ -45,12 +45,20 @@ export default function SaltySwipeList({ listData, setListData, updateReminder }
     const hours = datetime.getHours();
     const minutes = datetime.getMinutes();
 
-    const datetimeString = `${dateString} ${hours}:${minutes}`;
-    const prefix = (data.item.isScheduled) ? "Scheduled: " : "Recurring: ";
+    let prefix = "";
+    let datetimeString;
+    if (data.item.isScheduled){
+      datetimeString = `${dateString} ${hours}:${minutes}`;
+      prefix = "Scheduled: ";
+    }
+    else{
+      datetimeString = `Every ${hours} hrs ${minutes} mins`;
+      prefix = "Recurring: ";
+    }
 
     return (
       <View style={styles.rowFront}>
-        <Text>{ prefix + data.item.title }</Text>
+        <Text>{ data.item.title }</Text>
         <Text>{ datetimeString }</Text>
       </View>
     )};

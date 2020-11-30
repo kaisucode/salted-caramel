@@ -25,18 +25,36 @@ export default function CreditsModal() {
           transparent={true}
           visible={modalVisible}
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <TouchableWithoutFeedback onPress={() => { setModalVisible(!modalVisible); }} >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
 
-                <View style={styles.horizontalContainer}>
-                  <Button style={styles.openButton} title="Done"
-                    onPress={() => { setModalVisible(!modalVisible); }} />
-                </View>
+                {
+                  // <View style={styles.buttonContainer}>
+                  //   <Button 
+                  //     style={styles.openButton} 
+                  //     color={Colors.text}
+                  //     title="Done"
+                  //     onPress={() => { setModalVisible(!modalVisible); }} />
+                  // </View>
+                }
 
-                <Text style={styles.modalText}>
-                  Credits!!
-                </Text>
+                <View style={styles.textContainer}>
+                  <Text style={styles.headerText}>
+                    CREATED BY {"\n"}
+                  </Text>
+                  <Text style={styles.namesText}>
+                    Elizabeth Wu {"\n"} 
+                    Felicia Renelus {"\n"} 
+                    Jasmine Shum {"\n"} 
+                    Jennifer Wang {"\n"} 
+                    Kevin Hsu {"\n"} 
+                    Mandy He {"\n"} 
+                  </Text>
+                  <Text style={styles.modalText}>
+                    {"Special thanks to all the salted caramel lattes and cookies out there <3"}
+                  </Text>
+                </View>
 
               </View>
             </View>
@@ -63,7 +81,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#c8a2c8",
+    backgroundColor: Colors.mocha,
+
     width: "90%", 
     borderRadius: 20,
     padding: 35,
@@ -78,14 +97,15 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    // backgroundColor: "#F194FF",
-    // padding: 10,
     borderRadius: 20,
     elevation: 2, 
 
+    paddingLeft: 10,
+    paddingRight: 10,
+
     position: "relative", 
     top: -12, 
-    left: 22
+    left: 14
   },
   textStyle: {
     color: Colors.text,
@@ -93,9 +113,35 @@ const styles = StyleSheet.create({
     // fontWeight: "bold",
     // textAlign: "center", 
   },
+  headerText: {
+    textShadowColor: Colors.text,
+    textShadowOffset: {width: -3, height: 3},
+    textShadowRadius: 5,
+    textDecorationLine: "underline", 
+    color: Colors.yellow,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 20,
+  },
+  namesText: {
+    textShadowColor: Colors.text,
+    textShadowOffset: {width: -3, height: 3},
+    textShadowRadius: 5,
+    color: Colors.yellow,
+    marginBottom: 8,
+    textAlign: "center",
+    fontSize: 16
+  },
   modalText: {
+    textShadowColor: Colors.text,
+    textShadowOffset: {width: -3, height: 3},
+    textShadowRadius: 5,
+
+
+    color: Colors.yellow,
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
+    fontSize: 14
   }, 
   horizontalContainer: {
     flexDirection: 'row', 
@@ -103,6 +149,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     margin: 4
   }, 
+  buttonContainer: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    position: 'absolute',
+    width: '100%', 
+    top: 6,
+  }, 
+  textContainer: {
+    paddingTop: 20, 
+    paddingBottom: 30, 
+  },
   title: {
     fontSize: 28, 
     padding: 15, 

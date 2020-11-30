@@ -219,8 +219,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: Colors.text,
-    backgroundColor: '#956354',
+    backgroundColor: Colors.mocha,
     width: "90%", 
     width: '100%',
     height: '90%',
@@ -238,12 +237,15 @@ const styles = StyleSheet.create({
   },
   newButton: {
     backgroundColor: 'transparent',
+    paddingLeft: 10,
+    paddingRight: 10,
+
     borderRadius: 20,
     elevation: 2, 
 
     position: "relative", 
     top: -15, 
-    right: 20,
+    right: 12,
   },
   textStyle: {
     color: Colors.text,

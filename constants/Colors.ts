@@ -6,8 +6,8 @@ export const Colors = {
 	backgroundColor: '#ECB38E', 
 	gold: '#DDA778', 
 	header: '#a9714B',
-	yellow: '#fef2c3'
-
+	yellow: '#fef2c3',
+	mocha: '#956354',
 }
 
 export default {
