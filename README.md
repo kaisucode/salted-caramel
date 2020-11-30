@@ -5,6 +5,8 @@ Salty Caramel, because this app is very salty about you not finishing your tasks
 
 Here with your daily dosage of dissociation and insults
 
+![app-icon](/assets/images/salty-caramel-icon.png)
+
 ## Things to do
 
 - [x] async storage
@@ -18,12 +20,10 @@ Here with your daily dosage of dissociation and insults
 - [x] recurring reminders (extra datetime var, check if parameter empty) <- CalendarNotificationTrigger
 - [x] try-catch for outdated reminders
 - [x] randomized messages
-- [ ] easter egg
+- [x] credits page
+- [x] proper UI/UX
 - [ ] check off/mute reminders <-
 - [ ] [fix bug that happens when you edit recurring reminders](https://github.com/react-native-datetimepicker/datetimepicker/issues/30)
-
-- [ ] credits page
-- [ ] proper UI/UX
 
 ## Instructions
 
